@@ -1,0 +1,40 @@
+import animals from "../monsters.json" assert { type: "json" };
+
+const gameResult = (req, res) => {
+  const id = req.body.id;
+  const monster = animals.monsters.find((monster) => monster.id === id);
+  res.json(monster);
+};
+
+const getMonster = (req, res) => {
+  res.json(animals.monsters);
+};
+
+const gameStart = (req, res) => {
+  const data = req.body.data;
+
+  const monster1 = animals.monsters.find(
+    (monster) => monster.id == data.playerId
+  );
+
+  const monster2 = animals.monsters.find(
+    (monster) => monster.id == data.computerId
+  );
+
+  const monster1Sum =
+    monster1.defense + monster1.hp + monster1.speed + monster1.attack;
+
+  const monster2Sum =
+    monster2.defense + monster2.hp + monster2.speed + monster2.attack;
+
+  if (monster1Sum > monster2Sum) {
+    res.json({ id: monster1.id });
+  }
+  if (monster2Sum > monster1Sum) {
+    res.json({ id: monster2.id });
+  }
+  if (monster1Sum === monster2Sum) {
+    res.json({ id: 0 });
+  }
+};
+export { gameResult, getMonster, gameStart };
